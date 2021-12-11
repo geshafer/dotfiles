@@ -1,0 +1,12 @@
+#!/bin/bash
+
+unpack() {
+  if type apt-get; then
+    sudo apt-get install -y "$1"
+  elif type brew
+    brew install "$1"
+  fi
+}
+
+unpack rcm
+env RCRC=$HOME/dotfiles/rcrc rcup
