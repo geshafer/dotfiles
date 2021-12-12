@@ -3,10 +3,16 @@
 unpack() {
   if type apt-get; then
     sudo apt-get install -y "$1"
-  elif type brew
+  elif type brew; then
     brew install "$1"
   fi
 }
 
 unpack rcm
 env RCRC=$HOME/dotfiles/rcrc rcup
+
+if [ $SPIN ]; then
+  ./install_neovim_for_linux
+else
+  unpack neovim
+fi
