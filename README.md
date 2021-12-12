@@ -8,5 +8,5 @@ work on mac and linux for local and cloud based dev environments.
 Clone this repo to your `$HOME` directory and then run the following:
 
 ```zsh
-install
+$HOME/dotfiles/install.sh
 ```

@@ -1,2 +1,2 @@
-EXCLUDES="README*.md install"
+EXCLUDES="README*.md install machine"
 DOTFILES_DIRS="$HOME/dotfiles"

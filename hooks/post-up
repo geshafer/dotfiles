@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 if [ -e "$HOME"/.local/share/nvim/site/autoload/plug.vim ]; then
   nvim -E -s +PlugUpgrade +qa
@@ -9,4 +9,8 @@ fi
 
 nvim -u "$HOME"/.config/nvim/lua/bundles.lua +PlugUpdate +PlugClean! +qa
 
-reset -Q
+# For some reason, the lua script for telescope does
+# not properly run make so we do it manually here.
+cd $HOME/.config/nvim/plugged/telescope-fzf-native.nvim
+make &>/dev/null
+cd $HOME/dotfiles
