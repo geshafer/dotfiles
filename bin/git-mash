@@ -1,0 +1,23 @@
+#!/bin/sh
+
+branches=$(git for-each-ref refs/heads/ --format='%(refname:short)')
+default=$(echo "$branches" | grep 'main\|master')
+
+if [[ $(git rev-parse --abbrev-ref HEAD) != $default ]] ; then
+  git checkout $default
+fi
+
+while IFS= read -r branch; do
+  if [[ $branch == $default ]] ; then
+    continue
+  fi
+
+  tree=$(git rev-parse $branch^{tree})
+  parent=$(git merge-base $default $branch)
+  dangling=$(git commit-tree $tree -p $parent -m "Temp commit for $branch")
+  cherry=$(git cherry $default $dangling)
+
+  if [[ ${cherry:0:1} == "-" ]] ; then
+    git branch -D $branch
+  fi
+done <<< "$branches"
