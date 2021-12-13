@@ -1,8 +1,10 @@
 [user]
   name = Gale Shafer
   email = gale@hey.com
-[includeIf "gitdir/i:~/**/Shopify/**"]
+[includeIf "gitdir:~/Shopify/**"]
   path = ~/.gitconfig-shopify
+[includeIf "gitdir/i:/**/spin/**"]
+  path = ~/.gitconfig-spin
 [init]
   defaultBranch = main
 [push]
