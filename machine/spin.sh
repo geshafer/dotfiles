@@ -6,4 +6,7 @@ sudo apt-get install -y \
   silversearcher-ag \
   tmux
 
-$HOME/dotfiles/machine/spin/install_neovim
+$HOME/dotfiles/machine/spin/install_neovim.sh
+
+# install starship
+curl -fsSL https://starship.rs/install.sh | sh -s -- -f
