@@ -2,6 +2,7 @@
 
 brew bundle --file=- <<EOF
 brew "fzf"
+brew "mcfly"
 brew "neovim"
 brew "rcm"
 brew "starship"
