@@ -1,10 +1,7 @@
-[user]
-  name = Gale Shafer
-  email = gale@hey.com
-[includeIf "gitdir:~/Shopify/**"]
-  path = ~/.gitconfig-shopify
-[includeIf "gitdir/i:/**/spin/**"]
-  path = ~/.gitconfig-spin
+[include]
+  path = ~/.gitconfig-default
+[includeIf "gitdir:~/dotfiles/**"]
+  path = ~/.gitconfig-personal
 [init]
   defaultBranch = main
 [push]
@@ -15,6 +12,7 @@
   excludesfile = ~/.gitignore
   editor = nvim
   autocrlf = input
+  commitGraph = true
 [merge]
   ff = only
 [commit]
@@ -25,3 +23,8 @@
   autosquash = true
 [diff]
   colorMoved = zebra
+  algorithm = patience
+[gc]
+  writeCommitGraph = true
+[protocol]
+  version = 2
