@@ -17,7 +17,7 @@
 [gpg]
   program = /opt/dev/bin/gpg-auto-pin
 [commit]
-  gpgSign = true
+  gpgSign = false
 [user]
   email = gale.shafer@shopify.com
   name = Gale Shafer
