@@ -1,14 +1,8 @@
 [credential]
   helper =
   helper = store --file /opt/dev/var/private/git_credential_store
-[core]
-  commitGraph = true
 [diff]
   algorithm = patience
-[gc]
-  writeCommitGraph = true
-[protocol]
-  version = 2
 [url "https://github.com/Shopify/"]
   insteadOf = git@github.com:Shopify/
   insteadOf = git@github.com:shopify/

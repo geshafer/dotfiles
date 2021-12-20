@@ -49,7 +49,9 @@ vim.api.nvim_set_keymap('n', '<Leader>t', '<cmd>Telescope find_files<cr>', {nore
 require('gitsigns').setup()
 
 -- Show hide file browser
-require('nvim-tree').setup()
+require('nvim-tree').setup({
+  git = { enable = true, ignore = false, timeout = 500 }
+})
 vim.api.nvim_set_keymap('n', '<Leader>n', ':NvimTreeToggle<cr>', {noremap = true, silent = true})
 vim.g.nvim_tree_show_icons = { folders = 1, folder_arrows = 1 }
 
