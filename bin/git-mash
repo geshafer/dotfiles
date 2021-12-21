@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 branches=$(git for-each-ref refs/heads/ --format='%(refname:short)')
 default=$(echo "$branches" | grep 'main\|master')
