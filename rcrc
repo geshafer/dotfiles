@@ -1,2 +1,2 @@
-EXCLUDES="README*.md install machine"
+EXCLUDES="README*.md install machine fonts"
 DOTFILES_DIRS="$HOME/dotfiles"
