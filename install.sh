@@ -15,5 +15,3 @@ else
 fi
 
 env RCRC=$HOME/dotfiles/rcrc rcup -f
-
-exec zsh
