@@ -42,9 +42,9 @@ defaults write com.apple.dock orientation left
 # Don't show recent apps
 defaults write com.apple.dock "show-recents" -bool false
 
-# Set the icon size of Dock items to 16 pixels
-defaults write com.apple.dock largesize -int 16
-defaults write com.apple.dock tilesize -int 16
+# Set the icon size of Dock items
+defaults write com.apple.dock largesize -int 48
+defaults write com.apple.dock tilesize -int 48
 
 # Remove the auto-hiding Dock delay
 defaults write com.apple.dock autohide-delay -float 0
