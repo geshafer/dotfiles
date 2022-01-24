@@ -79,8 +79,8 @@ set.expandtab = true
 set.list = true
 set.listchars = {tab = '»·', trail = '·', nbsp = '·'}
 
--- Make it obvious where 80 characters is
-set.textwidth = 80
+-- Make it obvious where 120 characters is
+set.textwidth = 120
 set.colorcolumn = "+1"
 
 -- Numbers
