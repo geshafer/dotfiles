@@ -31,6 +31,31 @@ require('nvim-treesitter.configs').setup({
   indent = {enable = true},
 })
 
+-- Initialize LSP
+local on_attach = function(client, bufnr)
+  local opts = { noremap = true, silent = true }
+  vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gD', '<cmd>lua vim.lsp.buf.declaration()<CR>', opts)
+  vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gd', '<cmd>lua vim.lsp.buf.definition()<CR>', opts)
+  vim.api.nvim_buf_set_keymap(bufnr, 'n', 'K', '<cmd>lua vim.lsp.buf.hover()<CR>', opts)
+  vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<CR>', opts)
+  vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gt', '<cmd>lua vim.lsp.buf.type_definition()<CR>', opts)
+  vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>rn', '<cmd>lua vim.lsp.buf.rename()<CR>', opts)
+  vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gr', '<cmd>lua vim.lsp.buf.references()<CR>', opts)
+end
+
+-- Use a loop to conveniently call 'setup' on multiple servers and
+-- map buffer local keybindings when the language server attaches
+local servers = { 'sorbet' }
+for _, lsp in pairs(servers) do
+  require('lspconfig')[lsp].setup {
+    on_attach = on_attach,
+    flags = {
+      -- This will be the default in neovim 0.7+
+      debounce_text_changes = 150,
+    }
+  }
+end
+
 -- Initialize Fuzzy Finder
 local telescope_actions = require('telescope.actions')
 require('telescope').setup{
@@ -44,6 +69,8 @@ require('telescope').setup{
 }
 require('telescope').load_extension('fzf')
 vim.api.nvim_set_keymap('n', '<Leader>t', '<cmd>Telescope find_files<cr>', {noremap = true})
+vim.api.nvim_set_keymap('n', '<Leader>g', '<cmd>Telescope live_grep<cr>', {noremap = true})
+vim.api.nvim_set_keymap('n', '<Leader>be', '<cmd>Telescope buffers initial_mode=normal<cr>', {noremap = true})
 
 -- Initialize Git Gutter
 require('gitsigns').setup()

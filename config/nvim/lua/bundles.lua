@@ -4,11 +4,13 @@ vim.call('plug#begin', '~/.config/nvim/plugged')
 
 Plug('hoob3rt/lualine.nvim')
 
-Plug('jlanzarotta/bufexplorer')
-
 Plug('numkil/ag.nvim')
 
+Plug('github/copilot.vim')
+
 Plug('axelf4/vim-strip-trailing-whitespace')
+
+Plug('neovim/nvim-lspconfig')
 
 Plug('nvim-treesitter/nvim-treesitter', {['do'] = ':TSUpdate'})
 
