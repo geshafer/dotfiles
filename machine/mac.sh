@@ -3,6 +3,8 @@
 # Install expected apps
 brew bundle --file=- <<EOF
 brew "fzf"
+brew "kubectl"
+brew "kubectx"
 brew "mcfly"
 brew "neovim"
 brew "rcm"

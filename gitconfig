@@ -12,7 +12,6 @@
   excludesfile = ~/.gitignore
   editor = nvim
   autocrlf = input
-  commitGraph = true
 [merge]
   ff = only
 [commit]
@@ -23,8 +22,3 @@
   autosquash = true
 [diff]
   colorMoved = zebra
-  algorithm = patience
-[gc]
-  writeCommitGraph = true
-[protocol]
-  version = 2

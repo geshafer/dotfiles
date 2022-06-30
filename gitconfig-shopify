@@ -1,3 +1,5 @@
+[include]
+  path = /Users/galeshafer/.config/dev/gitconfig
 [credential]
   helper =
   helper = store --file /opt/dev/var/private/git_credential_store
