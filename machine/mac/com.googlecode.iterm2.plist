@@ -2,6 +2,8 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>CommandSelection</key>
+	<false/>
 	<key>Custom Color Presets</key>
 	<dict>
 		<key>Dracula</key>
@@ -781,7 +783,7 @@
 				<real>0.0</real>
 			</dict>
 			<key>Mouse Reporting</key>
-			<true/>
+			<false/>
 			<key>Name</key>
 			<string>Default</string>
 			<key>Non Ascii Font</key>
@@ -854,6 +856,8 @@
 			<string>/Users/galeshafer</string>
 		</dict>
 	</array>
+	<key>OptionClickMovesCursor</key>
+	<false/>
 	<key>PointerActions</key>
 	<dict>
 		<key>Button,1,1,,</key>
