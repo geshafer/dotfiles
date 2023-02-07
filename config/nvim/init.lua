@@ -141,7 +141,23 @@ vim.api.nvim_set_keymap('v', '<tab>', '%', {noremap = true})
 vim.api.nvim_set_keymap('n', '<Leader><space>', ':noh<cr>', {noremap = true})
 
 -- Send all vim registers to the mac clipboard
-set.clipboard = "unnamed"
+if(vim.env.spin == 1)
+then
+  vim.g.clipboard = {
+    name = 'pbcopy',
+    copy = {
+      ["+"] = 'pbcopy',
+      ["*"] = 'pbcopy',
+    },
+    paste = {
+      ["+"] = 'pbpaste',
+      ["*"] = 'pbpaste',
+    },
+    cache_enabled = 1
+  }
+else
+  set.clipboard = "unnamed"
+end
 
 -- Remap space to center on current line
 vim.api.nvim_set_keymap('n', '<space>', 'zz', {})
