@@ -1,0 +1,16 @@
+# This service unit is for persisting my command history using cartridges
+# By Gale Shafer
+# Something something Shopify
+#
+
+[Unit]
+Description=Persists the McFly cartridge
+Wants=persist-history.timer
+
+[Service]
+Type=oneshot
+User=spin
+ExecStart=cartridge save mcfly
+
+[Install]
+WantedBy=multi-user.target
