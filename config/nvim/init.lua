@@ -26,7 +26,7 @@ require('lualine').setup({
 
 -- Initialize TreeSitter
 require('nvim-treesitter.configs').setup({
-  ensure_installed = { "css", "dockerfile", "elixir", "html", "javascript", "json", "latex", "lua", "make", "ruby", "scss", "tsx", "typescript", "vim", "yaml" },
+  ensure_installed = { "css", "dockerfile", "elixir", "go", "html", "javascript", "json", "latex", "lua", "make", "ruby", "scss", "tsx", "typescript", "vim", "yaml" },
   highlight = {enable = true},
   indent = {enable = true},
 })
