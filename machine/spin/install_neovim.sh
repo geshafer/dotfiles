@@ -11,7 +11,7 @@ sudo apt-get install -y \
 sudo apt autoremove -yqq
 
 # Fetch App Image for NeoVim
-NVIM_VERSION="v0.8.0"
+NVIM_VERSION="v0.9.0"
 mkdir -p $HOME/dotfiles/tmp
 cd /usr/local/src
 sudo rm -rf nvim.appimage squashfs-root
