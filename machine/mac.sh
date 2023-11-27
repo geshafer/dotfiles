@@ -14,6 +14,7 @@ brew "tmux"
 
 cask "docker"
 cask "iterm2"
+cask "rectangle"
 EOF
 
 brew cleanup
