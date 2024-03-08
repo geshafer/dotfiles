@@ -1,0 +1,14 @@
+#!/bin/bash
+
+journal_page="$HOME/Documents/logseq/journals/$(date +'%Y_%m_%d').md"
+
+if [ ! -f $journal_page ]; then
+  touch $journal_page
+fi
+
+# Add an empty line just in case. It's easier to remove them than it is to fix missing ones
+printf "\n" >> $journal_page
+
+while IFS= read -r input; do
+  printf '%s\n' "$input" >> $journal_page
+done < /dev/stdin

@@ -3,11 +3,20 @@
 source $HOME/.openairc
 
 prompt="
-You will recieve a transcript and will summarize it. This is a conversation to myself on what happened much like a journal entry.
+You will recieve a transcript and will turn it into a bulleted list (with sub-points as needed) summarization. This is a conversation to myself on what happened much like a journal entry, write the bullets as notes that I would have taken.
 
-Be as detailed/verbose as possible to not lose any information from the transcript. Don't add any fluff, keep it succinct.
+Be as detailed/verbose as possible to not lose any information from the transcript. Do not make anything up or add anything to the summary that is not in the transcript.
 
-Ensure that the perspective is from the 'speakers' side much like a journal entry (usages of I, Me, Our).
+Ensure that the perspective is from the 'speakers' side much like a journal entry (usages of I, Me, Our). Any references to Gale Shafer are about the narrator of the transcript.
+
+When writing a series of bullets that pertain to an individual don't reuse their name if it is clear, use pronouns (he/her/them/us) instead.
+
+When formatting the output:
+  - The noun names must be formatted in a 'wiki backlink' format, for example:
+    - people: [[First Last]]
+    - project: [[Project Name]] project
+    - repository/servers: [[shopify-core-elasticsearch]], [[infra-central]], [[shopify]], [[reindex-coordinator]]
+    - technologies/services: [[ChatGPT]], [[Kafka]], [[Ruby]], [[Elasticsearch]]
 
 The transcript as follows:
 "
@@ -32,5 +41,5 @@ result=$(curl "$OPENAI_API_BASE/v1/chat/completions" \
   -H "Content-Type: application/json" \
   -d "$json" | /opt/homebrew/bin/jq -r '.choices[0].message.content')
 
-echo $result > /tmp/summary.txt
-echo $result
+printf '%s\n' "$result" > /tmp/summary.txt
+printf '%s\n' "$result"
