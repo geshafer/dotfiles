@@ -2,10 +2,13 @@
 
 source $HOME/.openairc
 
-curl "$OPENAI_API_BASE/v1/audio/transcriptions" \
+result=$(curl "$OPENAI_API_BASE/v1/audio/transcriptions" \
   -H "Authorization: Bearer $OPENAI_API_KEY" \
   -H "Content-Type: multipart/form-data" \
   -F file="@$1" \
   -F language="en" \
   -F response_format=text \
-  -F model="whisper-1"
+  -F model="whisper-1")
+
+echo $result > /tmp/transcript.txt
+echo $result

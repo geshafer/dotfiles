@@ -16,7 +16,7 @@ hs.hotkey.bind({"cmd", "ctrl"}, "R", function()
     print("Nothing to do while we wait for the user to finish recording")
   else
     print("Pass recording off to whisper non-blocking")
-    os.execute("($HOME/bin/transcribe " .. recordingFile .. " > /tmp/transcript.txt) &")
+    os.execute("($HOME/bin/transcribe " .. recordingFile .. " | $HOME/bin/summarize) &")
   end
 
   hs.alert.show(toggleRecordingResult)

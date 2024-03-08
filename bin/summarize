@@ -1,0 +1,36 @@
+#!/bin/bash
+
+source $HOME/.openairc
+
+prompt="
+You will recieve a transcript and will summarize it. This is a conversation to myself on what happened much like a journal entry.
+
+Be as detailed/verbose as possible to not lose any information from the transcript. Don't add any fluff, keep it succinct.
+
+Ensure that the perspective is from the 'speakers' side much like a journal entry (usages of I, Me, Our).
+
+The transcript as follows:
+"
+
+while IFS= read -r input; do
+  prompt=$(printf "$prompt\n\n$input")
+done < /dev/stdin
+
+json=$(/opt/homebrew/bin/jq -n --arg content "$prompt" --arg model "gpt-4" '
+{
+  "model": $model,
+  "messages": [
+    { "role": "system", "content": "You are a helpful assistant." },
+    { "role": "user", "content": $content }
+  ]
+}')
+
+echo $json > /tmp/prompt.json
+
+result=$(curl "$OPENAI_API_BASE/v1/chat/completions" \
+  -H "Authorization: Bearer $OPENAI_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d "$json" | /opt/homebrew/bin/jq -r '.choices[0].message.content')
+
+echo $result > /tmp/summary.txt
+echo $result
