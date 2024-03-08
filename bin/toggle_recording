@@ -1,7 +1,6 @@
 #!/bin/bash
 
-# ~ doesn't work with tmp so we use $HOME
-pid_file="$HOME/tmp/toggle_recording.pid"
+pid_file="/tmp/toggle_recording.pid"
 
 if [ -e $pid_file ]; then
   kill $(cat $pid_file)

@@ -9,7 +9,7 @@ function run_command(command)
 end
 
 hs.hotkey.bind({"cmd", "ctrl"}, "R", function()
-  local recordingFile = "$HOME/tmp/note_recording.mp3"
+  local recordingFile = "/tmp/note_recording.mp3"
   local toggleRecordingResult = run_command("$HOME/bin/toggle_recording " .. recordingFile)
 
   if toggleRecordingResult == "Recording Started" then
