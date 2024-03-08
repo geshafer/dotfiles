@@ -1,0 +1,18 @@
+#!/bin/bash
+
+# ~ doesn't work with tmp so we use $HOME
+pid_file="$HOME/tmp/toggle_recording.pid"
+
+if [ -e $pid_file ]; then
+  kill $(cat $pid_file)
+  rm $pid_file
+
+  echo "Recording Ended"
+else
+  # Lua doesn't load my normal path and I don't think it should so
+  # I just point at the homebrew bin which won't change for ffmpeg
+  nohup /opt/homebrew/bin/ffmpeg -y -f avfoundation -i ':0' -ar 16000 $1 > /dev/null 2>&1 &
+  echo $! > $pid_file
+
+  echo "Recording Started"
+fi
