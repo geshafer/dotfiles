@@ -13,6 +13,7 @@ brew "the_silver_searcher"
 brew "tmux"
 
 cask "docker"
+cask "hammerspoon"
 cask "iterm2"
 cask "rectangle"
 EOF

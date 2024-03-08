@@ -12,6 +12,7 @@ brew "starship"
 brew "the_silver_searcher"
 brew "tmux"
 
+cask "hammerspoon"
 cask "iterm2"
 cask "rectangle"
 EOF
