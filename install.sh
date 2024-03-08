@@ -2,15 +2,12 @@
 
 if [ $SPIN ]; then
   ./machine/spin.sh
-else
-  ./machine/mac.sh
-fi
-
-if [ $SPIN ]; then
   cp -f gitconfig-spin gitconfig-default
 elif hostname | grep -i Shopify &>/dev/null; then
+  ./machine/shopify.sh
   cp -f gitconfig-shopify gitconfig-default
 else
+  ./machine/mac.sh
   cp -f gitconfig-personal gitconfig-default
 fi
 
