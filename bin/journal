@@ -1,6 +1,6 @@
 #!/bin/bash
 
-journal_page="$HOME/Documents/logseq/journals/$(date +'%Y_%m_%d').md"
+journal_page="$HOME/Documents/notes/journals/$(date +'%Y_%m_%d').md"
 
 if [ ! -f $journal_page ]; then
   touch $journal_page
