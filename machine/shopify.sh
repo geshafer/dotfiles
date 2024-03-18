@@ -19,6 +19,7 @@ brew "tmux"
 
 cask "hammerspoon"
 cask "iterm2"
+cask "logseq"
 cask "rectangle"
 EOF
 
