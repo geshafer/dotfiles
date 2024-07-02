@@ -2,7 +2,7 @@ local Plug = vim.fn['plug#']
 
 vim.call('plug#begin', '~/.config/nvim/plugged')
 
-Plug('dracula/vim', { ['as'] = 'dracula' })
+Plug('loctvl842/monokai-pro.nvim')
 
 Plug('hoob3rt/lualine.nvim')
 

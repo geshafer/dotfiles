@@ -14,11 +14,14 @@ set.guicursor = "i:block" -- Use block cursor in input mode
 
 require('bundles')
 
-vim.cmd [[colorscheme dracula]]
+require("monokai-pro").setup({
+  filter = "spectrum"
+})
+vim.cmd([[colorscheme monokai-pro]])
 
 -- Initialize Status Line
 require('lualine').setup({
-  options = {theme = 'dracula'},
+  options = {theme = 'monokai-pro'},
   sections = {
     lualine_c = {
       {'filename', path = 1}
