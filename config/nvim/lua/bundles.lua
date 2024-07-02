@@ -2,6 +2,8 @@ local Plug = vim.fn['plug#']
 
 vim.call('plug#begin', '~/.config/nvim/plugged')
 
+Plug('dracula/vim', { ['as'] = 'dracula' })
+
 Plug('hoob3rt/lualine.nvim')
 
 Plug('jlanzarotta/bufexplorer')

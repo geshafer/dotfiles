@@ -12,9 +12,9 @@ set.autowrite = true      -- Automatically :write before running commands
 set.modelines = 0         -- Disable modelines as a security precaution
 set.guicursor = "i:block" -- Use block cursor in input mode
 
-vim.cmd [[colorscheme vim]]
-
 require('bundles')
+
+vim.cmd [[colorscheme dracula]]
 
 -- Initialize Status Line
 require('lualine').setup({
