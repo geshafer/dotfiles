@@ -20,6 +20,7 @@ brew "tmux"
 cask "docker"
 cask "hammerspoon"
 cask "iterm2"
+cask "licecap"
 cask "logseq"
 cask "rectangle"
 EOF
