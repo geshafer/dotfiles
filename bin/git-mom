@@ -1,3 +1,3 @@
 #!/bin/bash
 
-git for-each-ref refs/heads/ --format='%(refname:short)' | grep 'main\|master'
+git for-each-ref refs/heads/ --format='%(refname:short)' | grep -m 1 '^main\|^master'
