@@ -40,6 +40,9 @@ _load_settings "$HOME/.zsh/configs"
 # aliases
 [[ -f ~/.aliases ]] && source ~/.aliases
 
+# OpenAI Tokens
+[[ -f ~/.openairc ]] && source ~/.openairc
+
 export PATH="$HOME/bin:$PATH"
 
 [[ -f /opt/dev/sh/chruby/chruby.sh ]] && { type chruby >/dev/null 2>&1 || chruby () { source /opt/dev/sh/chruby/chruby.sh; chruby "$@"; } }

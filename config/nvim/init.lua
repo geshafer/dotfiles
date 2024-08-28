@@ -108,6 +108,19 @@ vim.api.nvim_set_keymap('v', '<Leader>/', ':Commentary<cr>', {noremap = true})
 -- Remember last cursor position
 require('nvim-lastplace').setup({})
 
+-- Configure Avante Code Assistant
+require('avante').setup({
+  provider = "openai",
+  openai = {
+    endpoint = os.getenv("OPENAI_API_CHAT_COMPLETIONS"),
+    model = "fast",
+    timeout = 30000, -- Timeout in milliseconds
+    temperature = 0,
+    max_tokens = 4096,
+    ["local"] = false,
+  },
+})
+
 -- matchit?
 -- Strip whitespace on save
 

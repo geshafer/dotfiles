@@ -10,8 +10,6 @@ Plug('jlanzarotta/bufexplorer')
 
 Plug('numkil/ag.nvim')
 
-Plug('github/copilot.vim')
-
 Plug('axelf4/vim-strip-trailing-whitespace')
 
 Plug('neovim/nvim-lspconfig')
@@ -42,5 +40,12 @@ Plug('tpope/vim-projectionist')
 Plug('tpope/vim-rails')
 Plug('tpope/vim-rake')
 Plug('tpope/vim-repeat')
+
+-- AI Code Helper like Cursor or Copilot chat
+Plug('yetone/avante.nvim')
+-- Plug('kyazdani42/nvim-web-devicons')
+Plug('stevearc/dressing.nvim')
+-- Plug('nvim-lua/plenary.nvim')
+Plug('MunifTanjim/nui.nvim')
 
 vim.call('plug#end')
