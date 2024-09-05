@@ -42,7 +42,7 @@ Plug('tpope/vim-rake')
 Plug('tpope/vim-repeat')
 
 -- AI Code Helper like Cursor or Copilot chat
-Plug('yetone/avante.nvim')
+Plug('yetone/avante.nvim', {['do'] = 'make'})
 -- Plug('kyazdani42/nvim-web-devicons')
 Plug('stevearc/dressing.nvim')
 -- Plug('nvim-lua/plenary.nvim')

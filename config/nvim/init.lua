@@ -109,11 +109,12 @@ vim.api.nvim_set_keymap('v', '<Leader>/', ':Commentary<cr>', {noremap = true})
 require('nvim-lastplace').setup({})
 
 -- Configure Avante Code Assistant
+require('avante_lib').load()
 require('avante').setup({
   provider = "openai",
   openai = {
     endpoint = os.getenv("OPENAI_API_CHAT_COMPLETIONS"),
-    model = "fast",
+    model = "anthropic:claude-3-5-sonnet",
     timeout = 30000, -- Timeout in milliseconds
     temperature = 0,
     max_tokens = 4096,
