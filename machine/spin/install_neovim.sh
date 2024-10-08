@@ -11,7 +11,7 @@ sudo apt-get install -y \
 sudo apt autoremove -yqq
 
 # Fetch App Image for NeoVim
-NVIM_VERSION="v0.9.0"
+NVIM_VERSION="v0.10.2"
 mkdir -p $HOME/dotfiles/tmp
 cd /usr/local/src
 sudo rm -rf nvim.appimage squashfs-root
@@ -30,7 +30,7 @@ if [[ ! -f /usr/local/bin/tree-sitter ]]; then
   cd $HOME/dotfiles/tmp
 
   # Install Tree-Sitter
-  TS_VERSION="v0.20.6"
+  TS_VERSION="v0.24.2"
   wget "https://github.com/tree-sitter/tree-sitter/releases/download/${TS_VERSION}/tree-sitter-linux-x64.gz"
   gunzip tree-sitter-linux-x64.gz
   chmod u+x tree-sitter-linux-x64
