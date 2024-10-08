@@ -17,7 +17,7 @@ sudo cp machine/spin/persist-history.timer /etc/systemd/system/persist-history.t
 systemctl start persist-history.service
 
 # install neovim
-$HOME/dotfiles/machine/spin/install_neovim.sh
+# $HOME/dotfiles/machine/spin/install_neovim.sh
 
 # install starship
 curl -fsSL https://starship.rs/install.sh | sh -s -- -f
