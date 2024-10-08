@@ -2,7 +2,7 @@
   path = /Users/galeshafer/.config/dev/gitconfig
 [credential]
   helper =
-  helper = store --file /opt/dev/var/private/git_credential_store
+  helper = osxkeychain
 [diff]
   algorithm = patience
 [url "https://github.com/Shopify/"]
