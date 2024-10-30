@@ -1,0 +1,61 @@
+#!/bin/bash
+
+key_file="${OPENAI_KEY_FILE:-.oai-proxy-details}"
+
+function update() {
+  curl -s 'https://openai-proxy.shopify.io/hmac/personal' \
+      -X 'POST' \
+      -H 'content-type: application/json' \
+      -H "Authorization: Bearer $(gcloud auth print-identity-token)" \
+      -o "$HOME/$key_file"
+
+  jq -r .$1 < "$HOME/$key_file"
+
+  return 0
+}
+
+function check() {
+    local verbose=$1
+    if [[ ! -f "$HOME/$key_file" ]]; then
+      if [[ $verbose = "-v" ]]; then
+        echo "Key not yet stored"
+      fi
+      return 1
+    fi
+
+    lastModificationSeconds=$(date -r $HOME/$key_file +%s)
+    currentSeconds=$(date +%s)
+    ((elapsedSeconds = currentSeconds - lastModificationSeconds))
+    (( timeLeft = 70000 - elapsedSeconds ))
+
+    if (( elapsedSeconds > 70000 )); then
+      if [[ $verbose = "-v" ]]; then
+        echo "Key expired by $timeLeft seconds"
+      fi
+      return 1
+    else
+      if [[ $verbose = "-v" ]]; then
+        echo "Key is still valid for $timeLeft seconds"
+      fi
+      return 0
+    fi
+
+    return 0
+}
+
+case $1 in
+  update)
+    update
+    ;;
+  check)
+    check "$2"
+    ;;
+  cat)
+    check || update
+    jq -r .key < "$HOME/$key_file"
+    ;;
+  *)
+    echo "Usage: $0 {update|check|cat}"
+    exit 1
+    ;;
+esac
