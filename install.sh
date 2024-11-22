@@ -3,7 +3,7 @@
 if [ $SPIN ]; then
   ./machine/spin.sh
   cp -f gitconfig-spin gitconfig-default
-elif hostname | grep -i Shopify &>/dev/null; then
+elif scutil --get ComputerName | grep -i Shopify &>/dev/null; then
   ./machine/shopify.sh
   cp -f gitconfig-shopify gitconfig-default
 else
