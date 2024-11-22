@@ -1,135 +1,36 @@
+-- Bootstrap lazy.nvim
+local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
+if not (vim.uv or vim.loop).fs_stat(lazypath) then
+  local lazyrepo = "https://github.com/folke/lazy.nvim.git"
+  local out = vim.fn.system({ "git", "clone", "--filter=blob:none", "--branch=stable", lazyrepo, lazypath })
+  if vim.v.shell_error ~= 0 then
+    vim.api.nvim_echo({
+      { "Failed to clone lazy.nvim:\n", "ErrorMsg" },
+      { out, "WarningMsg" },
+      { "\nPress any key to exit..." },
+    }, true, {})
+    vim.fn.getchar()
+    os.exit(1)
+  end
+end
+vim.opt.rtp:prepend(lazypath)
+
+-- Make sure to setup `mapleader` and `maplocalleader` before
+-- loading lazy.nvim so that mappings are correct.
 vim.g.mapleader = ","
 
-require('config.options')
-require('bundles')
+-- This is also a good place to setup other settings (vim.opt)
+require("config.options")
 
-require("monokai-pro").setup({
-  filter = "spectrum"
-})
-vim.cmd([[colorscheme monokai-pro]])
-
--- Initialize Status Line
-require('lualine').setup({
-  options = {theme = 'monokai-pro'},
-  sections = {
-    lualine_a = {'mode'},
-    lualine_b = {},
-    lualine_c = {
-      {'filename', path = 1}
-    },
-    lualine_x = {},
-    lualine_y = {'progress'},
-    lualine_z = {'location'},
+-- Setup lazy.nvim
+require("lazy").setup({
+  spec = {
+    -- import your plugins
+    { import = "plugins" },
   },
-  inactive_sections = {
-    lualine_a = {},
-    lualine_b = {},
-    lualine_c = {
-      {'filename', path = 1}
-    },
-    lualine_x = {},
-    lualine_y = {},
-    lualine_z = {},
-  },
+  -- Configure any other settings here. See the documentation for more details.
+  -- colorscheme that will be used when installing plugins.
+  install = { colorscheme = { "monokai-pro" } },
+  -- automatically check for plugin updates
+  checker = { enabled = true },
 })
-
--- Initialize TreeSitter
-require('nvim-treesitter.configs').setup({
-  ensure_installed = {
-    "c",
-    "css",
-    "dockerfile",
-    "elixir",
-    "go",
-    "html",
-    "javascript",
-    "json",
-    "latex",
-    "lua",
-    "make",
-    "markdown",
-    "ruby",
-    "scss",
-    "tsx",
-    "typescript",
-    "vim",
-    "vimdoc",
-    "yaml"
-  },
-  highlight = {enable = true},
-  indent = {enable = true},
-})
-
--- Initialize LSP
-local on_attach = function(client, bufnr)
-  local opts = { noremap = true, silent = true }
-  vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gD', '<cmd>lua vim.lsp.buf.declaration()<CR>', opts)
-  vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gd', '<cmd>lua vim.lsp.buf.definition()<CR>', opts)
-  vim.api.nvim_buf_set_keymap(bufnr, 'n', 'K', '<cmd>lua vim.lsp.buf.hover()<CR>', opts)
-  vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<CR>', opts)
-  vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gt', '<cmd>lua vim.lsp.buf.type_definition()<CR>', opts)
-  vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>rn', '<cmd>lua vim.lsp.buf.rename()<CR>', opts)
-  vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gr', '<cmd>lua vim.lsp.buf.references()<CR>', opts)
-end
-
--- Use a loop to conveniently call 'setup' on multiple servers and
--- map buffer local keybindings when the language server attaches
-local servers = { 'sorbet', 'gopls' }
-for _, lsp in pairs(servers) do
-  require('lspconfig')[lsp].setup {
-    on_attach = on_attach,
-    flags = {
-      -- This will be the default in neovim 0.7+
-      debounce_text_changes = 150,
-    }
-  }
-end
-
--- Initialize Fuzzy Finder
-local telescope_actions = require('telescope.actions')
-require('telescope').setup{
-  defaults = {
-    mappings = {
-      i = {
-        ["<esc>"] = telescope_actions.close
-      },
-    },
-  }
-}
-require('telescope').load_extension('fzf')
-vim.api.nvim_set_keymap('n', '<Leader>t', '<cmd>Telescope find_files<cr>', {noremap = true})
-vim.api.nvim_set_keymap('n', '<Leader>g', '<cmd>Telescope live_grep<cr>', {noremap = true})
-
--- Initialize Git Gutter
-require('gitsigns').setup()
-
--- Show hide file browser
-require('nvim-tree').setup({
-  git = { enable = true, ignore = false, timeout = 500 }
-})
-vim.api.nvim_set_keymap('n', '<Leader>n', ':NvimTreeFindFile<cr>', {noremap = true, silent = true})
-vim.g.nvim_tree_show_icons = { folders = 1, folder_arrows = 1 }
-
--- Comment with leader + /
-vim.api.nvim_set_keymap('n', '<Leader>/', ':Commentary<cr>', {noremap = true})
-vim.api.nvim_set_keymap('v', '<Leader>/', ':Commentary<cr>', {noremap = true})
-
--- Remember last cursor position
-require('nvim-lastplace').setup({})
-
--- Configure Avante Code Assistant
-require('avante_lib').load()
-require('avante').setup({
-  provider = "openai",
-  openai = {
-    endpoint = os.getenv("OPENAI_API_CHAT_COMPLETIONS"),
-    model = "anthropic:claude-3-5-sonnet",
-    timeout = 30000, -- Timeout in milliseconds
-    temperature = 0,
-    max_tokens = 4096,
-  },
-})
-
--- When the type of shell script is /bin/sh, assume a POSIX-compatible
--- shell for syntax highlighting purposes.
-vim.g.is_posix = 1

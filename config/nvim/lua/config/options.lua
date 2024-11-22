@@ -1,3 +1,5 @@
+vim.g.is_posix = 1                -- treat default shell as posix compatible
+
 vim.opt.number = true             -- Show line numbers
 vim.opt.numberwidth = 5           -- Give 5 characters of space for line numbers
 
