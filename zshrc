@@ -43,7 +43,7 @@ _load_settings "$HOME/.zsh/configs"
 # OpenAI Tokens
 [[ -f ~/.openairc ]] && source ~/.openairc
 
-export PATH="$HOME/bin:$PATH"
+export PATH="$HOME/bin:/opt/homebrew/opt/ruby/bin:$PATH"
 
 [[ -f /opt/dev/sh/chruby/chruby.sh ]] && { type chruby >/dev/null 2>&1 || chruby () { source /opt/dev/sh/chruby/chruby.sh; chruby "$@"; } }
 
