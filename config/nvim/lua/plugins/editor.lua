@@ -13,7 +13,7 @@ return {
   -- old vim plugins
   'pbrisbin/vim-mkdir',
   {
-    'tpope/vim-commentary',
+    'tpope/vim-commentary', -- replace with numToStr/Comment.nvim
     init = function()
       vim.api.nvim_set_keymap('n', '<Leader>/', ':Commentary<cr>', {noremap = true})
       vim.api.nvim_set_keymap('v', '<Leader>/', ':Commentary<cr>', {noremap = true})

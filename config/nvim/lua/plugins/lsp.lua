@@ -8,14 +8,14 @@ return {
     config = function()
       require('mason').setup()
       require('mason-lspconfig').setup({
-        ensure_installed = { "solargraph", "gopls" }
+        ensure_installed = { "lua_ls", "solargraph", "gopls" }
       })
 
       -- :h mason-lspconfig-automatic-server-setup
       require('mason-lspconfig').setup_handlers({
         function(server_name)
           require('lspconfig')[server_name].setup({
-            on_attach = function(client, bufnr)
+            on_attach = function(_, bufnr)
               local opts = { noremap = true, silent = true }
               vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gD', '<cmd>lua vim.lsp.buf.declaration()<CR>', opts)
               vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gd', '<cmd>lua vim.lsp.buf.definition()<CR>', opts)
@@ -29,5 +29,16 @@ return {
         end,
       })
     end,
+  },
+  {
+    "folke/lazydev.nvim", -- lsp extensions for lua
+    ft = "lua", -- only load on lua files
+    opts = {
+      library = {
+        -- See the configuration section for more details
+        -- Load luvit types when the `vim.uv` word is found
+        { path = "${3rd}/luv/library", words = { "vim%.uv" } },
+      },
+    },
   },
 }
