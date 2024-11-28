@@ -3,7 +3,7 @@
 sudo apt-get install -y \
   fzf \
   rcm \
-  silversearcher-ag \
+  ripgrep \
   tmux
 
 # install mcfly

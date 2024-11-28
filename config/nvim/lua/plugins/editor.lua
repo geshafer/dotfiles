@@ -1,6 +1,18 @@
 return {
   'jlanzarotta/bufexplorer',
-  'numkil/ag.nvim',
+  {
+    'doums/rg.nvim',
+    cmd = { 'Rg' },
+    init = function()
+      vim.api.nvim_set_keymap('n', '<Leader>rg', ':Rg <C-r><C-w><cr>', {noremap = true})
+      vim.api.nvim_set_keymap('v', '<Leader>rg', ':Rg <C-r><C-w><cr>', {noremap = true})
+    end,
+    opts = {
+      excluded = {
+        '.git',
+      },
+    },
+  },
   'axelf4/vim-strip-trailing-whitespace',
   {
     'lewis6991/gitsigns.nvim',
