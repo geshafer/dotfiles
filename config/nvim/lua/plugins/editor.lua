@@ -1,4 +1,14 @@
 return {
+  {
+    'FabijanZulj/blame.nvim',
+    cmd = { 'BlameToggle', 'Git' },
+    config = function(_, opts)
+      require('blame').setup(opts)
+
+      -- Old habits die hard. Custom vim-fugitive command.
+      vim.api.nvim_create_user_command('Git', 'BlameToggle window', { desc = 'Git Blame', nargs = '*' })
+    end,
+  },
   'jlanzarotta/bufexplorer',
   {
     'doums/rg.nvim',
@@ -37,5 +47,4 @@ return {
 
   -- old vim plugins
   'tpope/vim-eunuch',
-  'tpope/vim-fugitive',
 }
