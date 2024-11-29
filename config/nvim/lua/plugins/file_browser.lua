@@ -4,6 +4,9 @@ return {
     dependencies = {
       'kyazdani42/nvim-web-devicons',
     },
+    keys = {
+      { '<Leader>n', ':NvimTreeFindFile<cr>' },
+    },
     opts = {
       git = {
         enable = true,
@@ -11,9 +14,5 @@ return {
         timeout = 500,
       }
     },
-    init = function()
-      vim.api.nvim_set_keymap('n', '<Leader>n', ':NvimTreeFindFile<cr>', {noremap = true, silent = true})
-      vim.g.nvim_tree_show_icons = {folders = 1, folder_arrows = 1}
-    end,
   },
 }
