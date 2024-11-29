@@ -23,6 +23,7 @@ brew "starship"
 brew "tmux"
 
 cask "docker"
+cask "font-inconsolata-nerd-font"
 cask "hammerspoon"
 cask "iterm2"
 cask "licecap"
@@ -31,9 +32,6 @@ cask "rectangle"
 EOF
 
 brew cleanup
-
-# Install preferred font
-cp fonts/Inconsolata\ Nerd\ Font\ Complete\ Mono.otf ~/Library/Fonts/
 
 # Setup expected defaults
 $HOME/dotfiles/machine/mac/defaults.sh
