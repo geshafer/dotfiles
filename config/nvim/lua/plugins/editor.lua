@@ -24,16 +24,19 @@ return {
     'ethanholz/nvim-lastplace',
     config = true,
   },
+  {
+    'numToStr/Comment.nvim',
+    keys = {
+      { '<Leader>/', '<Plug>(comment_toggle_linewise_current)', mode = 'n', noremap = true, desc = "Toggle Comment" },
+      { '<Leader>/', '<Plug>(comment_toggle_linewise_visual)', mode = 'v', noremap = true, desc = "Toggle Comment" },
+    },
+    opts = {
+      mappings = false,
+    }
+  },
 
   -- old vim plugins
   'pbrisbin/vim-mkdir',
-  {
-    'tpope/vim-commentary', -- replace with numToStr/Comment.nvim
-    init = function()
-      vim.api.nvim_set_keymap('n', '<Leader>/', ':Commentary<cr>', {noremap = true})
-      vim.api.nvim_set_keymap('v', '<Leader>/', ':Commentary<cr>', {noremap = true})
-    end,
-  },
   'tpope/vim-endwise',
   'tpope/vim-eunuch',
   'tpope/vim-fugitive',
