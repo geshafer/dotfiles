@@ -36,12 +36,6 @@ return {
   },
 
   -- old vim plugins
-  'pbrisbin/vim-mkdir',
-  'tpope/vim-endwise',
   'tpope/vim-eunuch',
   'tpope/vim-fugitive',
-  'tpope/vim-projectionist',
-  'tpope/vim-rails',
-  'tpope/vim-rake',
-  'tpope/vim-repeat',
 }
