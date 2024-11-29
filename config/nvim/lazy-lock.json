@@ -11,7 +11,7 @@
   "monokai-pro.nvim": { "branch": "master", "commit": "d79eef3cbbd2e8323e9c2131a912c0131b6dbc85" },
   "nui.nvim": { "branch": "main", "commit": "b58e2bfda5cea347c9d58b7f11cf3012c7b3953f" },
   "nvim-lastplace": { "branch": "main", "commit": "0bb6103c506315044872e0f84b1f736c4172bb20" },
-  "nvim-lspconfig": { "branch": "master", "commit": "e8f9c46c99e1901167a92ab13e2357158e5aabdb" },
+  "nvim-lspconfig": { "branch": "master", "commit": "6a5ed22255bbe10104ff9b72c55ec2e233a8e571" },
   "nvim-tree.lua": { "branch": "master", "commit": "ca7c4c33cac2ad66ec69d45e465379716ef0cc97" },
   "nvim-treesitter": { "branch": "master", "commit": "4d035005d338e4b1eb71a175bd44974e2f64740f" },
   "nvim-web-devicons": { "branch": "master", "commit": "edbe0a65cfacbbfff6a4a1e98ddd60c28c560509" },
