@@ -3,10 +3,9 @@ return {
   {
     'doums/rg.nvim',
     cmd = { 'Rg' },
-    init = function()
-      vim.api.nvim_set_keymap('n', '<Leader>rg', ':Rg <C-r><C-w><cr>', {noremap = true})
-      vim.api.nvim_set_keymap('v', '<Leader>rg', ':Rg <C-r><C-w><cr>', {noremap = true})
-    end,
+    keys = {
+      { "<leader>rg", ":Rg <C-r><C-w><cr>", desc = "Ripgrep" },
+    },
     opts = {
       excluded = {
         '.git',
@@ -19,8 +18,12 @@ return {
     dependencies = {
       'nvim-lua/plenary.nvim',
     },
+    config = true,
   },
-  'ethanholz/nvim-lastplace',
+  {
+    'ethanholz/nvim-lastplace',
+    config = true,
+  },
 
   -- old vim plugins
   'pbrisbin/vim-mkdir',

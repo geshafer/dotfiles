@@ -10,6 +10,9 @@ return {
         build = 'make',
       },
     },
+    keys = {
+      { '<Leader>t', '<cmd>Telescope find_files<cr>', desc = 'Telescope Fuzzy Finder' }
+    },
     opts = function()
       local telescope_actions = require('telescope.actions')
       return {
@@ -22,9 +25,9 @@ return {
         },
       }
     end,
-    init = function()
+    config = function(_, opts)
+      require('telescope').setup(opts)
       require('telescope').load_extension('fzf')
-      vim.api.nvim_set_keymap('n', '<Leader>t', '<cmd>Telescope find_files<cr>', {noremap = true})
     end,
   },
 }
