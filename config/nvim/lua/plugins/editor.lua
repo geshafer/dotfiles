@@ -22,9 +22,13 @@ return {
       },
     },
   },
-  'axelf4/vim-strip-trailing-whitespace',
+  {
+    'axelf4/vim-strip-trailing-whitespace',
+    event = 'VeryLazy',
+  },
   {
     'lewis6991/gitsigns.nvim',
+    event = "VeryLazy",
     dependencies = {
       'nvim-lua/plenary.nvim',
     },
@@ -32,6 +36,8 @@ return {
   },
   {
     'ethanholz/nvim-lastplace',
+    lazy = false, -- make sure we load this during startup
+    priority = 800, -- make sure to load this before everything except the status line
     config = true,
   },
   {

@@ -1,6 +1,8 @@
 return {
   {
     'hoob3rt/lualine.nvim',
+    lazy = false, -- make sure we load this during startup
+    priority = 900, -- make sure to load this before everything except the colorscheme
     opts = {
       options = {theme = 'kanagawa'},
       sections = {
