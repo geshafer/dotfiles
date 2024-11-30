@@ -21,6 +21,6 @@
   "rg.nvim": { "branch": "main", "commit": "b6bdbdff8cb38412d0f8efb105e899cc72cc3a9a" },
   "telescope-fzf-native.nvim": { "branch": "main", "commit": "cf48d4dfce44e0b9a2e19a008d6ec6ea6f01a83b" },
   "telescope.nvim": { "branch": "master", "commit": "2eca9ba22002184ac05eddbe47a7fe2d5a384dfc" },
-  "vim-eunuch": { "branch": "master", "commit": "6c6af39aa0a25223389607338ae965c5dfc7c972" },
-  "vim-strip-trailing-whitespace": { "branch": "master", "commit": "59385775cbe416b2797ec5e2c7eb445a3398dd46" }
+  "trim.nvim": { "branch": "master", "commit": "84a1016c7484943e9fbb961f807c3745342b2462" },
+  "vim-eunuch": { "branch": "master", "commit": "6c6af39aa0a25223389607338ae965c5dfc7c972" }
 }

@@ -22,8 +22,9 @@ return {
     },
   },
   {
-    'axelf4/vim-strip-trailing-whitespace',
+    'cappyzawa/trim.nvim',
     event = 'VeryLazy',
+    config = true,
   },
   {
     'lewis6991/gitsigns.nvim',
