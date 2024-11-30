@@ -2,7 +2,7 @@ return {
   {
     'hoob3rt/lualine.nvim',
     opts = {
-      options = {theme = 'monokai-pro'},
+      options = {theme = 'kanagawa'},
       sections = {
         lualine_a = {'mode'},
         lualine_b = {},
