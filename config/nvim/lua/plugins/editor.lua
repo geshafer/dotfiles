@@ -44,7 +44,8 @@ return {
       mappings = false,
     }
   },
-
-  -- old vim plugins
-  'tpope/vim-eunuch',
+  {
+    'tpope/vim-eunuch',
+    cmd = { 'Remove', 'Delete', 'Move', 'Rename', 'Mkdir'  }
+  }
 }
