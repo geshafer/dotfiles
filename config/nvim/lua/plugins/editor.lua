@@ -9,7 +9,6 @@ return {
       vim.api.nvim_create_user_command('Git', 'BlameToggle window', { desc = 'Git Blame', nargs = '*' })
     end,
   },
-  'jlanzarotta/bufexplorer',
   {
     'doums/rg.nvim',
     cmd = { 'Rg' },
