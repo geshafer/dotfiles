@@ -5,10 +5,12 @@ return {
       'neovim/nvim-lspconfig',
       'williamboman/mason.nvim',
     },
+    cmd = { 'Mason' },
+    ft = { 'ruby', 'go' },
     config = function()
       require('mason').setup()
       require('mason-lspconfig').setup({
-        ensure_installed = { "lua_ls", "solargraph", "gopls" }
+        ensure_installed = { 'solargraph', 'gopls' }
       })
 
       -- :h mason-lspconfig-automatic-server-setup
@@ -31,13 +33,13 @@ return {
     end,
   },
   {
-    "folke/lazydev.nvim", -- lsp extensions for lua
-    ft = "lua", -- only load on lua files
+    'folke/lazydev.nvim', -- lsp extensions for lua
+    ft = 'lua', -- only load on lua files
     opts = {
       library = {
         -- See the configuration section for more details
         -- Load luvit types when the `vim.uv` word is found
-        { path = "${3rd}/luv/library", words = { "vim%.uv" } },
+        { path = '${3rd}/luv/library', words = { 'vim%.uv' } },
       },
     },
   },
