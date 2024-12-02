@@ -22,6 +22,11 @@ return {
     },
   },
   {
+    'yorickpeterse/nvim-pqf', -- Prettier Quickfix Windows
+    event = 'VeryLazy',
+    config = true,
+  },
+  {
     'cappyzawa/trim.nvim',
     event = 'VeryLazy',
     config = true,
