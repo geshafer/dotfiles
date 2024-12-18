@@ -1,3 +1,16 @@
+default_on_attach = function(_, bufnr)
+  local opts = { noremap = true, silent = true }
+
+  -- The default mappings we want to setup for every lsp
+  vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gD', '<cmd>lua vim.lsp.buf.declaration()<CR>', opts)
+  vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gd', '<cmd>lua vim.lsp.buf.definition()<CR>', opts)
+  vim.api.nvim_buf_set_keymap(bufnr, 'n', 'K', '<cmd>lua vim.lsp.buf.hover()<CR>', opts)
+  vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<CR>', opts)
+  vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gt', '<cmd>lua vim.lsp.buf.type_definition()<CR>', opts)
+  vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>rn', '<cmd>lua vim.lsp.buf.rename()<CR>', opts)
+  vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gr', '<cmd>lua vim.lsp.buf.references()<CR>', opts)
+end
+
 return {
   {
     'williamboman/mason-lspconfig.nvim',
@@ -7,29 +20,17 @@ return {
     },
     cmd = { 'Mason' },
     ft = { 'ruby', 'go' },
-    config = function()
-      require('mason').setup()
-      require('mason-lspconfig').setup({
-        ensure_installed = { 'solargraph', 'gopls' }
-      })
-
-      -- :h mason-lspconfig-automatic-server-setup
-      require('mason-lspconfig').setup_handlers({
+    opts = {
+      ensure_installed = { 'solargraph', 'gopls' },
+      handlers = {
         function(server_name)
-          require('lspconfig')[server_name].setup({
-            on_attach = function(_, bufnr)
-              local opts = { noremap = true, silent = true }
-              vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gD', '<cmd>lua vim.lsp.buf.declaration()<CR>', opts)
-              vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gd', '<cmd>lua vim.lsp.buf.definition()<CR>', opts)
-              vim.api.nvim_buf_set_keymap(bufnr, 'n', 'K', '<cmd>lua vim.lsp.buf.hover()<CR>', opts)
-              vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<CR>', opts)
-              vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gt', '<cmd>lua vim.lsp.buf.type_definition()<CR>', opts)
-              vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>rn', '<cmd>lua vim.lsp.buf.rename()<CR>', opts)
-              vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gr', '<cmd>lua vim.lsp.buf.references()<CR>', opts)
-            end
-          })
-        end,
-      })
+          require('lspconfig')[server_name].setup({ on_attach = default_on_attach })
+        end
+      },
+    },
+    config = function(_, opts)
+      require('mason').setup()
+      require('mason-lspconfig').setup(opts)
     end,
   },
   {
