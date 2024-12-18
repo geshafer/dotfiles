@@ -18,6 +18,7 @@ vim.opt.visualbell = true         -- No beeping.
 vim.opt.splitbelow = true         -- :sp adds new pane below
 vim.opt.splitright = true         -- :vs adds new pane to the right
 vim.opt.modeline = false          -- don't use insecure embedded vim code
+vim.opt.mouse = ""                -- disable mouse movement
 
 
 
