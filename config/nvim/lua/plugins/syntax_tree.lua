@@ -18,6 +18,7 @@ return {
         "markdown",
         "ruby",
         "scss",
+        "terraform",
         "tsx",
         "typescript",
         "vim",
