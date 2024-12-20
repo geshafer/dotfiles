@@ -21,7 +21,15 @@ return {
     cmd = { 'Mason' },
     ft = { 'ruby', 'go' },
     opts = {
-      ensure_installed = { 'solargraph', 'gopls' },
+      ensure_installed = {
+        -- Ruby
+        'rubocop',
+        'ruby_lsp',
+        'sorbet',
+
+        -- Go
+        'gopls',
+      },
       handlers = {
         function(server_name)
           require('lspconfig')[server_name].setup({ on_attach = default_on_attach })
