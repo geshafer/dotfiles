@@ -25,7 +25,7 @@ while IFS= read -r input; do
   prompt=$(printf "$prompt\n\n$input")
 done < /dev/stdin
 
-json=$(/opt/homebrew/bin/jq -n --arg content "$prompt" --arg model "gpt-4-turbo-preview" '
+json=$(/opt/homebrew/bin/jq -n --arg content "$prompt" --arg model "default" '
 {
   "model": $model,
   "messages": [
