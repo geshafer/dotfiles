@@ -14,8 +14,8 @@ When writing a series of bullets that pertain to an individual don't reuse their
 When formatting the output:
   - The noun names must be formatted in a 'wiki backlink' format, for example:
     - people: [[First Last]]
-    - project: [[Project Name]] project
-    - repository/servers: [[shopify-core-elasticsearch]], [[infra-central]], [[shopify]], [[reindex-coordinator]]
+    - project: [[Project Name]] project, [[Picklists]] project, [[Multiple Holds]] project
+    - repository/servers: [[html2pdf]], [[infra-central]], [[shopify]], [[reindex-coordinator]]
     - technologies/services: [[ChatGPT]], [[Kafka]], [[Ruby]], [[Elasticsearch]]
 
 The transcript as follows:
