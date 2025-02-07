@@ -13,6 +13,8 @@ return {
       relative = 'editor',
       position = {'center', 'center'},
       sort_mru = true, -- most recently used
+      split_filename = true, -- show path separately
+      split_filename_path_width = 50,
 
       keymap = {
         close = 'd',
