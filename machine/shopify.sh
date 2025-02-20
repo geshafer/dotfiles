@@ -20,6 +20,9 @@ brew "ruby"
 brew "starship"
 brew "tmux"
 
+tap "withgraphite/tap"
+brew "graphite"
+
 cask "font-inconsolata-nerd-font"
 cask "hammerspoon"
 cask "iterm2"
