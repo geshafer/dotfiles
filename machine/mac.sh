@@ -8,6 +8,7 @@ fi
 brew bundle --file=- <<EOF
 brew "ffmpeg"
 brew "fzf"
+brew "git"
 brew "go"
 brew "gopls"
 brew "kubebuilder"
