@@ -31,6 +31,7 @@ cask "kitty"
 cask "licecap"
 cask "logseq"
 cask "rectangle"
+cask "shortcat"
 EOF
 
 brew cleanup
