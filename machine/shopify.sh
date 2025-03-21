@@ -9,6 +9,7 @@ brew bundle --file=- <<EOF
 brew "ffmpeg"
 brew "fzf"
 brew "git"
+brew "gh"
 brew "kubectl"
 brew "kubectx"
 brew "mcfly"
