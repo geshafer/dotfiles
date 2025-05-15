@@ -1,6 +1,35 @@
 #!/bin/bash
+#
+# git-find-merge - Find the merge commit where a specific commit was merged into a branch
+#
+# Usage: git find-merge <commit> [<branch>]
 
 commit=$1
 branch=${2:-HEAD}
 
-(git rev-list $commit..$branch --ancestry-path | cat -n; git rev-list $commit..$branch --first-parent | cat -n) | sort -k2 -s | uniq -f1 -d | sort -n | tail -1 | cut -f2
+# Validate required arguments
+if [ -z "$commit" ]; then
+  echo "Error: Missing required argument <commit>"
+  echo "Usage: git find-merge <commit> [<branch>]"
+  exit 1
+fi
+
+# Get all commits between commit and branch via ancestry-path with line numbers
+ancestry_path=$(git rev-list $commit..$branch --ancestry-path | cat -n)
+
+# Get all commits between commit and branch that are first-parents with line numbers
+first_parent=$(git rev-list $commit..$branch --first-parent | cat -n)
+
+# Combine both lists and sort by commit hash while preserving line numbers
+sorted_by_hash=$({ echo "$ancestry_path"; echo "$first_parent"; } | sort -k2 -s)
+
+# Find duplicate commit hashes (the ones that appear in both lists)
+duplicate_hashes=$(echo "$sorted_by_hash" | uniq -f1 -d)
+
+# Sort by original line numbers to get chronological order
+sorted_by_line=$(echo "$duplicate_hashes" | sort -n)
+
+# Get the closest to the target branch
+merge_commit=$(echo "$sorted_by_line" | tail -1 | cut -f2)
+
+echo "$merge_commit"
