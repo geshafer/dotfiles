@@ -1,0 +1,183 @@
+#!/bin/bash
+
+parts=$(echo "$1" | sed -E 's|^https://([^/]+)(/repos)?/([^/]+)/([^/]+)/([^/]+)/([0-9]+)$|\3 \4 \5 \6|')
+
+if [[ -z "$parts" || "$parts" == "$url" ]]; then
+  echo "Error: URL format not recognized"
+  exit 1
+fi
+
+read -r owner repo _resource item_number <<< "$parts"
+
+graphql_query="
+query {
+  repository(owner: \"$owner\", name: \"$repo\") {
+    issueOrPullRequest(number: $item_number) {
+      ... on Issue {
+        id
+        state
+        createdAt
+        updatedAt
+        body
+        author {
+          login
+        }
+        assignees(first: 100) {
+          nodes {
+            login
+          }
+        }
+        labels(first: 100) {
+          nodes {
+            name
+          }
+        }
+        comments(first: 100) {
+          nodes {
+            author {
+              login
+            }
+            createdAt
+            updatedAt
+            body
+          }
+        }
+        timelineItems(first: 100) {
+          nodes {
+            __typename
+            ... on IssueComment {
+              author {
+                login
+              }
+              createdAt
+              body
+            }
+            ... on LabeledEvent {
+              actor {
+                login
+              }
+              createdAt
+              label {
+                name
+              }
+            }
+            ... on AssignedEvent {
+              actor {
+                login
+              }
+              createdAt
+              assignee {
+                ... on User {
+                  login
+                }
+              }
+            }
+          }
+        }
+      }
+      ... on PullRequest {
+        id
+        state
+        createdAt
+        updatedAt
+        body
+        author {
+          login
+        }
+        assignees(first: 100) {
+          nodes {
+            login
+          }
+        }
+        labels(first: 100) {
+          nodes {
+            name
+          }
+        }
+        comments(first: 100) {
+          nodes {
+            author {
+              login
+            }
+            createdAt
+            updatedAt
+            body
+          }
+        }
+        timelineItems(first: 100) {
+          nodes {
+            __typename
+            ... on IssueComment {
+              author {
+                login
+              }
+              createdAt
+              body
+            }
+            ... on LabeledEvent {
+              actor {
+                login
+              }
+              createdAt
+              label {
+                name
+              }
+            }
+            ... on AssignedEvent {
+              actor {
+                login
+              }
+              createdAt
+              assignee {
+                ... on User {
+                  login
+                }
+              }
+            }
+          }
+        }
+        # PR-specific fields
+        reviewRequests(first: 100) {
+          nodes {
+            requestedReviewer {
+              ... on User {
+                login
+              }
+              ... on Team {
+                name
+              }
+            }
+          }
+        }
+        reviews(first: 100) {
+          nodes {
+            author {
+              login
+            }
+            createdAt
+            updatedAt
+            body
+            state
+          }
+        }
+        commits(first: 100) {
+          nodes {
+            commit {
+              oid
+              message
+              author {
+                name
+                date
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}"
+
+# Clean up the query by removing empty lines and extra whitespace
+graphql_query=$(echo "$graphql_query" | sed '/^\s*$/d' | sed 's/^ *//')
+
+gh api graphql -f query="$graphql_query" | jq .
