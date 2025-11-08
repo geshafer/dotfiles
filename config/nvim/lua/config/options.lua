@@ -83,3 +83,11 @@ then
     cache_enabled = 1
   }
 end
+
+
+
+-- Copy filename to system clipboard
+vim.keymap.set('n', '<Leader>y', function()
+  local filename = vim.fn.expand('%:.')
+  vim.fn.setreg('+', filename)
+end, { desc = 'Yank filename to clipboard' })
