@@ -1,18 +1,28 @@
 return {
   {
-    'kyazdani42/nvim-tree.lua',
-    dependencies = {
-      'kyazdani42/nvim-web-devicons',
-    },
+    'folke/snacks.nvim',
     keys = {
-      { '<Leader>n', ':NvimTreeFindFile<cr>' },
+      { '<Leader>n', function() Snacks.explorer() end, desc = 'File Browser' },
     },
     opts = {
-      git = {
-        enable = true,
-        ignore = false,
-        timeout = 500,
-      }
+      picker = {
+        sources = {
+          explorer = {
+            layout = {
+              preset = 'sidebar',
+              hidden = { 'input', 'preview' },
+            },
+            git_status = false,
+          },
+        },
+        win = {
+          input = {
+            keys = {
+              ['<Esc>'] = { 'close', mode = { 'n', 'i' } },
+            },
+          },
+        },
+      },
     },
   },
 }

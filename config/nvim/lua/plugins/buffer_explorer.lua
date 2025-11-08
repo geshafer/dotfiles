@@ -1,38 +1,46 @@
+exclude_quickfix = function(item, ctx)
+  if item.buf then
+    local bt = vim.bo[item.buf].buftype
+    if bt == 'quickfix' then
+      return false
+    end
+  end
+  return item
+end
+
 return {
   {
-    'matbme/JABS.nvim',
-    dependencies = {
-      'kyazdani42/nvim-web-devicons',
-    },
+    'folke/snacks.nvim',
     keys = {
-      { '<leader>be', ':JABSOpen<cr>', desc = 'Open buffer explorer' },
+      { '<Leader>be', function() Snacks.picker.buffers() end, desc = 'Buffer Explorer' },
     },
     opts = {
-      height = 16,
-      width = 100,
-      relative = 'editor',
-      position = {'center', 'center'},
-      sort_mru = true, -- most recently used
-      split_filename = true, -- show path separately
-      split_filename_path_width = 50,
-
-      keymap = {
-        close = 'd',
-        preview = 'i',
-      },
-
-      symbols = {
-        current = " ◦",
-        split = " ◦",
-        alternate = " •",
-        hidden = " •",
-
-        locked = "",
-        ro = "",
-        edited = "",
-        terminal = "",
-        default_file = "",
-        terminal_symbol = "",
+      picker = {
+        sources = {
+          buffers = {
+            format = 'buffer',
+            focus = 'list',
+            layout = {
+              preset = 'select',
+              hidden = { 'input', 'preview' },
+            },
+            win = {
+              list = {
+                keys = {
+                  ['d'] = 'bufdelete',
+                },
+              },
+            },
+            transform = exclude_quickfix,
+          },
+        },
+        win = {
+          input = {
+            keys = {
+              ['<Esc>'] = { 'close', mode = { 'n', 'i' } },
+            },
+          },
+        },
       },
     },
   },
