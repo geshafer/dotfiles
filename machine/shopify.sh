@@ -5,7 +5,7 @@ if ! command -v brew &> /dev/null; then
 fi
 
 # Install expected apps
-brew bundle --file=- <<EOF
+brew bundle --upgrade --file=- <<EOF
 brew "ffmpeg"
 brew "fzf"
 brew "git"
