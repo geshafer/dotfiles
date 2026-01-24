@@ -68,21 +68,6 @@ vim.opt.incsearch = true  -- Highlight matches as you type
 
 -- Send all vim registers to the mac clipboard
 vim.opt.clipboard = "unnamedplus"
-if(vim.env.SPIN == "1")
-then
-  vim.g.clipboard = {
-    name = 'pbcopy',
-    copy = {
-      ["+"] = 'pbcopy',
-      ["*"] = 'pbcopy',
-    },
-    paste = {
-      ["+"] = 'pbpaste',
-      ["*"] = 'pbpaste',
-    },
-    cache_enabled = 1
-  }
-end
 
 
 
