@@ -4,6 +4,9 @@ return {
   {
     "neovim/nvim-lspconfig",
     lazy = true,
+    dependencies = {
+      "j-hui/fidget.nvim",
+    },
     init = function()
       local util = require("lspconfig.util")
 
@@ -49,7 +52,7 @@ return {
         return { "ruby-lsp" }
       end
 
-      local function sorbet_cmd()
+      local function sorbet_cmd(_root)
         local command = { "bundle", "exec", "srb", "tc", "--lsp" }
         if vim.fn.executable("shadowenv") == 1 then
           local prefixed = { "shadowenv", "exec", "--" }
@@ -58,13 +61,26 @@ return {
         return command
       end
 
+      local lsp_kinds = {
+        ruby = {
+          markers = { "Gemfile", ".ruby-lsp", "config.ru", "Rakefile", ".git", ".shadowenv.d" },
+          make_cmd = ruby_cmd,
+        },
+        sorbet = {
+          markers = { "sorbet" },
+          make_cmd = sorbet_cmd,
+          filetypes = { "ruby" },
+        },
+      }
+
       local state = {
         ruby = {},
         sorbet = {},
         buffers = {},
+        indexed = {},
       }
 
-      local function find_ruby_root(path)
+      local function find_root(path, markers)
         if not path or path == "" then
           return nil
         end
@@ -72,7 +88,7 @@ return {
         if not dir or dir == "" then
           return nil
         end
-        local markers = { "Gemfile", ".ruby-lsp", "config.ru", "Rakefile", ".git", ".shadowenv.d" }
+
         local found = vim.fs.find(markers, {
           upward = true,
           path = dir,
@@ -82,25 +98,6 @@ return {
           return nil
         end
         return vim.fs.dirname(found[1])
-      end
-
-      local function find_sorbet_root(path)
-        if not path or path == "" then
-          return nil
-        end
-        local dir = vim.fs.dirname(path)
-        if not dir or dir == "" then
-          return nil
-        end
-        local found = vim.fs.find("sorbet/config", {
-          upward = true,
-          path = dir,
-          stop = vim.loop.os_homedir(),
-        })
-        if #found == 0 then
-          return nil
-        end
-        return vim.fs.dirname(vim.fs.dirname(found[1]))
       end
 
       local function attach_existing(client_id, bufnr)
@@ -114,64 +111,59 @@ return {
         return vim.lsp.buf_attach_client(bufnr, client_id)
       end
 
-      local function ensure_ruby(bufnr, filepath)
-        local root = find_ruby_root(filepath)
+      local function start_client(kind, root)
         if not root then
-          return
+          return nil
         end
-        local entry = state.buffers[bufnr] or {}
-        entry.ruby = root
-        state.buffers[bufnr] = entry
-        if attach_existing(state.ruby[root], bufnr) then
-          return
+        local cache = state[kind]
+        if cache[root] then
+          local client = vim.lsp.get_client_by_id(cache[root])
+          if client and not client:is_stopped() then
+            return cache[root]
+          end
         end
 
+        local spec = lsp_kinds[kind]
         local config = {
-          name = string.format("ruby_lsp(%s)", project_label(root)),
-          cmd = ruby_cmd(root),
+          name = kind .. "(" .. project_label(root) .. ")",
+          cmd = spec.make_cmd(root),
           root_dir = root,
           capabilities = capabilities,
           on_attach = lsp_config.on_attach,
         }
+        if spec.filetypes then
+          config.filetypes = spec.filetypes
+        end
+
         local client_id = vim.lsp.start(config, {
-          bufnr = bufnr,
           reuse_client = function()
             return false
           end,
         })
         if client_id then
-          state.ruby[root] = client_id
+          cache[root] = client_id
         end
+        return client_id
       end
 
-      local function ensure_sorbet(bufnr, filepath)
-        local root = find_sorbet_root(filepath)
+      local function ensure_lsp(kind, bufnr, filepath)
+        local spec = lsp_kinds[kind]
+        local root = find_root(filepath, spec.markers)
         if not root then
           return
         end
+
         local entry = state.buffers[bufnr] or {}
-        entry.sorbet = root
+        entry[kind] = root
         state.buffers[bufnr] = entry
-        if attach_existing(state.sorbet[root], bufnr) then
+
+        if attach_existing(state[kind][root], bufnr) then
           return
         end
 
-        local config = {
-          name = string.format("sorbet(%s)", project_label(root)),
-          cmd = sorbet_cmd(),
-          root_dir = root,
-          capabilities = capabilities,
-          filetypes = { "ruby" },
-          on_attach = lsp_config.on_attach,
-        }
-        local client_id = vim.lsp.start(config, {
-          bufnr = bufnr,
-          reuse_client = function()
-            return false
-          end,
-        })
+        local client_id = start_client(kind, root)
         if client_id then
-          state.sorbet[root] = client_id
+          vim.lsp.buf_attach_client(bufnr, client_id)
         end
       end
 
@@ -191,26 +183,17 @@ return {
         end
         state.buffers[bufnr] = nil
 
-        if entry.ruby and not root_in_use("ruby", entry.ruby) then
-          local client_id = state.ruby[entry.ruby]
-          if client_id then
-            local client = vim.lsp.get_client_by_id(client_id)
-            if client then
-              client:stop()
+        for kind in pairs(lsp_kinds) do
+          if entry[kind] and not root_in_use(kind, entry[kind]) then
+            local client_id = state[kind][entry[kind]]
+            if client_id then
+              local client = vim.lsp.get_client_by_id(client_id)
+              if client then
+                client:stop()
+              end
             end
+            state[kind][entry[kind]] = nil
           end
-          state.ruby[entry.ruby] = nil
-        end
-
-        if entry.sorbet and not root_in_use("sorbet", entry.sorbet) then
-          local client_id = state.sorbet[entry.sorbet]
-          if client_id then
-            local client = vim.lsp.get_client_by_id(client_id)
-            if client then
-              client:stop()
-            end
-          end
-          state.sorbet[entry.sorbet] = nil
         end
       end
 
@@ -219,8 +202,9 @@ return {
         if filepath == "" then
           return
         end
-        ensure_ruby(bufnr, filepath)
-        ensure_sorbet(bufnr, filepath)
+        for kind in pairs(lsp_kinds) do
+          ensure_lsp(kind, bufnr, filepath)
+        end
       end
 
       local group = vim.api.nvim_create_augroup("ruby_shadowenv_lsp", { clear = true })
@@ -240,6 +224,25 @@ return {
           cleanup(args.buf)
         end,
       })
+
+      -- Start Ruby/Sorbet LSPs after startup if cwd is a Ruby project
+      vim.api.nvim_create_autocmd("VimEnter", {
+        group = group,
+        callback = function()
+          vim.schedule(function()
+            local cwd = vim.fn.getcwd()
+            local marker = cwd .. "/."
+            for kind, spec in pairs(lsp_kinds) do
+              local root = find_root(marker, spec.markers)
+              if root then
+                vim.notify("Starting " .. kind .. " for " .. project_label(root), vim.log.levels.INFO)
+                start_client(kind, root)
+              end
+            end
+          end)
+        end,
+      })
+
     end,
   },
 }

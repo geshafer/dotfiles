@@ -6,6 +6,7 @@ return {
     dependencies = {
       'neovim/nvim-lspconfig',
       'williamboman/mason.nvim',
+      'j-hui/fidget.nvim',
     },
     cmd = { 'Mason' },
     ft = { 'go' },
