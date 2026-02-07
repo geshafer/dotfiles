@@ -53,3 +53,6 @@ export PATH="$HOME/bin:/opt/homebrew/opt/ruby/bin:$PATH"
 export KUBECONFIG=${KUBECONFIG:+$KUBECONFIG:}/Users/galeshafer/.kube/config:/Users/galeshafer/.kube/config.shopify.cloudplatform
 for file in /Users/galeshafer/src/github.com/Shopify/cloudplatform/workflow-utils/*.bash; do source ${file}; done
 kubectl-short-aliases
+
+# Added by tec agent
+[[ -x /Users/galeshafer/.local/state/tec/profiles/base/current/global/init ]] && eval "$(/Users/galeshafer/.local/state/tec/profiles/base/current/global/init zsh)"
