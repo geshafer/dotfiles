@@ -44,6 +44,7 @@ _load_settings "$HOME/.zsh/configs"
 [[ -f ~/.openairc ]] && source ~/.openairc
 
 export PATH="$HOME/bin:/opt/homebrew/opt/ruby/bin:$PATH"
+eval "$(try init)"
 
 [[ -f /opt/dev/sh/chruby/chruby.sh ]] && { type chruby >/dev/null 2>&1 || chruby () { source /opt/dev/sh/chruby/chruby.sh; chruby "$@"; } }
 

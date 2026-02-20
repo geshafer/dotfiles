@@ -33,7 +33,11 @@ cask "licecap"
 cask "logseq"
 cask "rectangle"
 cask "shortcat"
+
 EOF
+
+brew tap tobi/try https://github.com/tobi/try
+brew install try
 
 brew cleanup
 
