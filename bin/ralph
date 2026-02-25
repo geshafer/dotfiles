@@ -4,6 +4,14 @@
 
 set -e
 
+# Debug logging helper
+DEBUG=false
+debug() {
+  if $DEBUG; then
+    echo -e "\033[33m[DEBUG $(date '+%H:%M:%S')] $*\033[0m" >&2
+  fi
+}
+
 # Parse arguments
 TOOL="claude"  # Default to claude
 MAX_ITERATIONS=10
@@ -53,10 +61,18 @@ LAST_BRANCH_FILE="$RALPH_DIR/.last-branch"
 # Auto-create ralph/ dir if it doesn't exist
 mkdir -p "$RALPH_DIR"
 
+debug "AGENTS_FILE=$AGENTS_FILE"
+debug "RALPH_DIR=$RALPH_DIR"
+debug "PRD_FILE=$PRD_FILE (exists: $([ -f "$PRD_FILE" ] && echo 'yes' || echo 'NO'))"
+debug "PROGRESS_FILE=$PROGRESS_FILE (exists: $([ -f "$PROGRESS_FILE" ] && echo 'yes' || echo 'NO'))"
+debug "LAST_BRANCH_FILE=$LAST_BRANCH_FILE (exists: $([ -f "$LAST_BRANCH_FILE" ] && echo 'yes' || echo 'NO'))"
+
 # Archive previous run if branch changed
+debug "Checking for branch change..."
 if [ -f "$PRD_FILE" ] && [ -f "$LAST_BRANCH_FILE" ]; then
   CURRENT_BRANCH=$(jq -r '.branchName // empty' "$PRD_FILE" 2>/dev/null || echo "")
   LAST_BRANCH=$(cat "$LAST_BRANCH_FILE" 2>/dev/null || echo "")
+  debug "CURRENT_BRANCH=$CURRENT_BRANCH | LAST_BRANCH=$LAST_BRANCH"
 
   if [ -n "$CURRENT_BRANCH" ] && [ -n "$LAST_BRANCH" ] && [ "$CURRENT_BRANCH" != "$LAST_BRANCH" ]; then
     # Archive the previous run
@@ -93,6 +109,17 @@ if [ ! -f "$PROGRESS_FILE" ]; then
   echo "---" >> "$PROGRESS_FILE"
 fi
 
+debug "PRD contents summary:"
+if [ -f "$PRD_FILE" ]; then
+  STORY_COUNT=$(jq '.stories | length' "$PRD_FILE" 2>/dev/null || echo "unknown")
+  PASSING_COUNT=$(jq '[.stories[] | select(.passes == true)] | length' "$PRD_FILE" 2>/dev/null || echo "unknown")
+  FAILING_COUNT=$(jq '[.stories[] | select(.passes == false)] | length' "$PRD_FILE" 2>/dev/null || echo "unknown")
+  debug "  Stories: $STORY_COUNT total, $PASSING_COUNT passing, $FAILING_COUNT failing"
+  debug "  First failing story: $(jq -r '[.stories[] | select(.passes == false)][0] | "\(.id) - \(.title)"' "$PRD_FILE" 2>/dev/null || echo 'none')"
+else
+  debug "  WARNING: PRD_FILE does not exist!"
+fi
+
 echo "Starting Ralph - Tool: $TOOL - Max iterations: $MAX_ITERATIONS"
 
 for i in $(seq 1 $MAX_ITERATIONS); do
@@ -101,27 +128,139 @@ for i in $(seq 1 $MAX_ITERATIONS); do
   echo "  Ralph Iteration $i of $MAX_ITERATIONS ($TOOL)"
   echo "==============================================================="
 
+  tmpfile=$(mktemp)
+  trap "rm -f $tmpfile" EXIT
+  debug "tmpfile=$tmpfile"
+
   # Run the selected tool with the ralph prompt
   if [[ "$TOOL" == "amp" ]]; then
+    debug "Running: cat AGENTS.md | amp --dangerously-allow-all"
     OUTPUT=$(cat "$AGENTS_FILE" | amp --dangerously-allow-all 2>&1 | tee /dev/stderr) || true
+    echo "$OUTPUT" > "$tmpfile"
+    debug "amp exit code: $? | output length: ${#OUTPUT}"
   else
-    # Claude Code: use --dangerously-skip-permissions for autonomous operation, --print for output
-    OUTPUT=$(devx claude --dangerously-skip-permissions --print < "$AGENTS_FILE" 2>&1 | tee /dev/stderr) || true
+    # Claude Code: use --dangerously-skip-permissions with stream-json for live progress output
+    debug "Running: devx claude --dangerously-skip-permissions --output-format=stream-json --verbose --print < AGENTS.md"
+    debug "AGENTS.md size: $(wc -c < "$AGENTS_FILE" 2>/dev/null || echo 'MISSING') bytes"
+    debug "Checking devx claude is available: $(which devx 2>/dev/null || echo 'NOT FOUND')"
+
+    # Use a named pipe so we can capture the exit code of devx claude
+    PIPE_EXIT_FILE=$(mktemp)
+    echo "unknown" > "$PIPE_EXIT_FILE"
+
+    (
+      devx claude --dangerously-skip-permissions --output-format=stream-json \
+        --verbose --print < "$AGENTS_FILE" 2>&1
+      echo $? > "$PIPE_EXIT_FILE"
+    ) | tee "$tmpfile" | {
+      LINE_COUNT=0
+      JSON_COUNT=0
+      NON_JSON_COUNT=0
+      PARSED_COUNT=0
+      while IFS= read -r line; do
+        LINE_COUNT=$((LINE_COUNT + 1))
+        if [ $LINE_COUNT -le 3 ] || [ $((LINE_COUNT % 50)) -eq 0 ]; then
+          debug "Processing line $LINE_COUNT (len=${#line}): ${line:0:120}..."
+        fi
+        if echo "$line" | jq -e . >/dev/null 2>&1; then
+          JSON_COUNT=$((JSON_COUNT + 1))
+          MSG_TYPE=$(echo "$line" | jq -r '.type // "unknown"' 2>/dev/null)
+          if [ $JSON_COUNT -le 5 ] || [ $((JSON_COUNT % 20)) -eq 0 ]; then
+            debug "  JSON line $JSON_COUNT: type=$MSG_TYPE"
+          fi
+          PARSED=$(echo "$line" | jq -r --unbuffered '
+            if .type == "content_block_delta" then
+              .delta.text // empty
+            elif .type == "assistant" then
+              (.message.content[]? |
+                if .type == "text" then
+                  "\n" + .text
+                elif .type == "tool_use" then
+                  "\n\u001b[90m[Tool: " + .name + "]\n" + ((.input | tostring) // "") + "\u001b[0m"
+                else
+                  empty
+                end
+              ) // empty
+            elif .type == "user" then
+              (.message.content[]? |
+                if .type == "tool_result" then
+                  "\n\u001b[90m[Result]:\n" + ((.content // "") | if type == "array" then (.[].text // "" | tostring) else tostring end)[0:2000] + "\u001b[0m"
+                else
+                  empty
+                end
+              ) // empty
+            else
+              empty
+            end
+          ' 2>&1)
+          JQ_EXIT=$?
+          if [ $JQ_EXIT -ne 0 ]; then
+            debug "  jq parse FAILED (exit=$JQ_EXIT) for type=$MSG_TYPE"
+          elif [ -n "$PARSED" ]; then
+            PARSED_COUNT=$((PARSED_COUNT + 1))
+            echo "$PARSED"
+          fi
+        else
+          NON_JSON_COUNT=$((NON_JSON_COUNT + 1))
+          if [ $NON_JSON_COUNT -le 5 ]; then
+            debug "  Non-JSON line $NON_JSON_COUNT: ${line:0:200}"
+          fi
+        fi
+      done
+      debug "Pipeline done: total_lines=$LINE_COUNT json=$JSON_COUNT non_json=$NON_JSON_COUNT parsed_output=$PARSED_COUNT"
+    } || true
+
+    DEVX_EXIT=$(cat "$PIPE_EXIT_FILE" 2>/dev/null || echo "unknown")
+    rm -f "$PIPE_EXIT_FILE"
+    debug "devx claude exit code: $DEVX_EXIT"
   fi
 
+  echo ""
+  TMPFILE_SIZE=$(wc -c < "$tmpfile" 2>/dev/null || echo 0)
+  TMPFILE_LINES=$(wc -l < "$tmpfile" 2>/dev/null || echo 0)
+  debug "tmpfile size: $TMPFILE_SIZE bytes, $TMPFILE_LINES lines"
+  if [ "$TMPFILE_SIZE" -eq 0 ] 2>/dev/null; then
+    debug "WARNING: tmpfile is EMPTY - devx claude produced no output at all"
+  else
+    debug "tmpfile first 3 lines:"
+    head -3 "$tmpfile" | while IFS= read -r line; do
+      debug "  ${line:0:200}"
+    done
+    debug "tmpfile last 2 lines:"
+    tail -2 "$tmpfile" | while IFS= read -r line; do
+      debug "  ${line:0:200}"
+    done
+  fi
+  echo "[Iteration $i complete]"
+
   # Check for completion signal
-  if echo "$OUTPUT" | grep -q "<promise>COMPLETE</promise>"; then
+  debug "Checking for <promise>COMPLETE</promise> in tmpfile..."
+  if grep -q "<promise>COMPLETE</promise>" "$tmpfile" 2>/dev/null; then
+    debug "FOUND completion signal!"
     echo ""
     echo "Ralph completed all tasks!"
     echo "Completed at iteration $i of $MAX_ITERATIONS"
+    rm -f "$tmpfile"
     exit 0
+  else
+    debug "No completion signal found. Continuing to next iteration."
+    # Show any promise-like strings that might be close
+    PROMISE_LIKE=$(grep -i "promise\|complete\|COMPLETE" "$tmpfile" 2>/dev/null | head -3 || true)
+    if [ -n "$PROMISE_LIKE" ]; then
+      debug "Found promise/complete-like strings in output:"
+      echo "$PROMISE_LIKE" | while IFS= read -r line; do
+        debug "  ${line:0:200}"
+      done
+    fi
   fi
 
-  echo "Iteration $i complete. Continuing..."
+  rm -f "$tmpfile"
+  debug "Sleeping 2 seconds before next iteration..."
   sleep 2
 done
 
 echo ""
+debug "Reached max iterations limit ($MAX_ITERATIONS)"
 echo "Ralph reached max iterations ($MAX_ITERATIONS) without completing all tasks."
 echo "Check $PROGRESS_FILE for status."
 exit 1
