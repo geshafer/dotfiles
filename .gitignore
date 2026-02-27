@@ -2,3 +2,6 @@
 tmp/**/*
 logseq/git/**/*
 logseq/graphs/**/*
+pi/agent-shopify/auth.json
+pi/agent-shopify/sessions/
+pi/agent-shopify/bin/
