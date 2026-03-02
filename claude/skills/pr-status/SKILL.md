@@ -1,6 +1,6 @@
 ---
 name: pr-status
-description: Check the status of all open GitHub pull requests authored by the user across all repos. Shows review decision, CI status, merge state, draft status, and recommended next action for each PR. Use when asked about open PRs, what PRs need attention, PR review status, or anything about pull request state.
+description: Check the status of all open GitHub pull requests authored by the user across all repos. Shows review decision, CI status, merge state, draft status, and recommended next action for each PR. Use when asked about open PRs, what PRs need attention, PR review status, or anything about pull request state. Always invoke this skill before running any gh CLI commands related to PRs.
 ---
 
 # PR Status

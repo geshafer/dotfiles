@@ -26,3 +26,4 @@
   colorMoved = zebra
 [maintenance]
 	repo = /Users/galeshafer/world/trees/root/src
+	repo = /Users/galeshafer/world/trees/batched-cache/src
