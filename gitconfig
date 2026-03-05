@@ -2,6 +2,7 @@
   path = ~/.gitconfig-default
 	path = /Users/galeshafer/.config/dev/gitconfig
 	path = /Users/galeshafer/.config/dev/gitconfig
+	path = /Users/galeshafer/.config/dev/gitconfig
 [includeIf "gitdir:~/dotfiles/**"]
   path = ~/.gitconfig-personal
 [init]
@@ -27,3 +28,5 @@
 [maintenance]
 	repo = /Users/galeshafer/world/trees/root/src
 	repo = /Users/galeshafer/world/trees/batched-cache/src
+	repo = /Users/galeshafer/world/trees/maintenance-task/src
+	repo = /Users/galeshafer/world/trees/48912-compute-fulfillability/src
