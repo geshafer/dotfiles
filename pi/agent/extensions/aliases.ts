@@ -7,4 +7,11 @@ export default function (pi: ExtensionAPI) {
       await ctx.newSession();
     },
   });
+
+  pi.registerCommand("exit", {
+    description: "Quit pi (alias for /quit)",
+    handler: async (_args, ctx) => {
+      await ctx.quit();
+    },
+  });
 }

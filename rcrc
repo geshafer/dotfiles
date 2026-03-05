@@ -1,3 +1,4 @@
 EXCLUDES="README*.md install machine fonts"
 DOTFILES_DIRS="$HOME/dotfiles"
 UNDOTTED="Library bin"
+SYMLINK_DIRS="pi/agent pi/agent-shopify/extensions"
