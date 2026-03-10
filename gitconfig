@@ -26,7 +26,8 @@
 [diff]
   colorMoved = zebra
 [maintenance]
-	repo = /Users/galeshafer/world/trees/root/src
 	repo = /Users/galeshafer/world/trees/batched-cache/src
 	repo = /Users/galeshafer/world/trees/maintenance-task/src
 	repo = /Users/galeshafer/world/trees/48912-compute-fulfillability/src
+	repo = /Users/galeshafer/world/trees/consume-from-kafka/src
+	repo = /Users/galeshafer/world/git

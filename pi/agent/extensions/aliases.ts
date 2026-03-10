@@ -11,7 +11,7 @@ export default function (pi: ExtensionAPI) {
   pi.registerCommand("exit", {
     description: "Quit pi (alias for /quit)",
     handler: async (_args, ctx) => {
-      await ctx.quit();
+      ctx.shutdown();
     },
   });
 }
