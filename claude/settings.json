@@ -8,5 +8,19 @@
   "enabledPlugins": {},
   "feedbackSurveyState": {
     "lastShownTime": 1754238098539
+  },
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/Users/galeshafer/.claude/hooks/skills-update.mjs",
+            "timeout": 10000
+          }
+        ]
+      }
+    ]
   }
 }

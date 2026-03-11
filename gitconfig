@@ -1,8 +1,6 @@
 [include]
   path = ~/.gitconfig-default
 	path = /Users/galeshafer/.config/dev/gitconfig
-	path = /Users/galeshafer/.config/dev/gitconfig
-	path = /Users/galeshafer/.config/dev/gitconfig
 [includeIf "gitdir:~/dotfiles/**"]
   path = ~/.gitconfig-personal
 [init]
