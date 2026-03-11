@@ -41,5 +41,16 @@ brew install try
 
 brew cleanup
 
+# Install Shopify agent tools (global CLIs)
+npm install -g \
+  @shopify-internal/agent-ci \
+  @shopify-internal/agent-data \
+  @shopify-internal/agent-observe \
+  @shopify-internal/agent-slack \
+  @shopify-internal/agent-slack-read \
+  @shopify-internal/agent-vault \
+  @shopify-internal/agent-world
+
+
 # Setup expected defaults
 $HOME/dotfiles/machine/mac/defaults.sh
