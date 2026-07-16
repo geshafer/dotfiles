@@ -5,3 +5,9 @@ logseq/graphs/**/*
 pi/agent-shopify/auth.json
 pi/agent-shopify/sessions/
 pi/agent-shopify/bin/
+pi/agent/auth.json
+pi/agent/sessions/
+pi/agent/trust.json
+pi/agent/.shopify-default-applied.json
+pi/agent/extensions/pi-sieve
+pi/agent/extensions/shopify-proxy
